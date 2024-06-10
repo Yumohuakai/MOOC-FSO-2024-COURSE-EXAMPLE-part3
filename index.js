@@ -17,6 +17,11 @@ let notes = [
     content: "GET and POST are the most important methods of HTTP protocol",
     important: true,
   },
+  {
+    id: 4,
+    content: "postman is import tool",
+    important: true,
+  },
 ];
 
 app.get("/", (request, response) => {
