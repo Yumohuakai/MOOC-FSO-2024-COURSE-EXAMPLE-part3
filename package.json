@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "cd F:/SelfStudy - Programming-repeat-practice/FSO2024/course-example && npm run build && copy dist P:/MOOC_courses/FullStackOpen2024/practice-part3",
+    "build_my1": "cd F:/SelfStudy - Programming-repeat-practice/FSO2024/course-example && dir",
+    "build_my2": "cd F:/SelfStudy - Programming-repeat-practice/FSO2024/course-example && npm run build",
+    "deploy:full": "npm run build_my1 && git add . && git commit -m uibuild && git push"
   },
   "author": "Jing",
   "license": "MIT",
