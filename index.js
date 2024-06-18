@@ -31,10 +31,10 @@ app.use(express.static("dist"));
 //   },
 // ];
 
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-  return maxId + 1;
-};
+// const generateId = () => {
+//   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
+//   return maxId + 1;
+// };
 
 const requestLogger = (request, response, next) => {
   console.log("Method:", request.method);
@@ -71,26 +71,27 @@ app.post("/api/notes", (request, response) => {
     });
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     important: Boolean(body.important) || false,
-    id: generateId(),
-  };
+  });
 
-  notes = notes.concat(note);
-
-  response.json(note);
+  note.save().then((savedNote) => {
+    response.json(savedNote);
+  });
 });
 
 app.get("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const note = notes.find((note) => note.id === id);
-
-  if (note) {
+  Note.findById(request.params.id).then((note) => {
     response.json(note);
-  } else {
-    response.status(404).end();
-  }
+  });
+  //   const note = notes.find((note) => note.id === id);
+
+  //   if (note) {
+  //     response.json(note);
+  //   } else {
+  //     response.status(404).end();
+  //   }
 });
 
 app.delete("/api/notes/:id", (request, response) => {
