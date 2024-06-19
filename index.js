@@ -4,9 +4,9 @@ const cors = require("cors");
 const Note = require("./models/note");
 
 const app = express();
+app.use(express.static("dist"));
 app.use(express.json());
 app.use(cors());
-app.use(express.static("dist"));
 
 // let notes = [
 //   {
@@ -43,22 +43,6 @@ const requestLogger = (request, response, next) => {
   console.log("---");
   next();
 };
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
-};
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
-  }
-
-  next(error);
-};
-
-app.use(express.json());
 app.use(requestLogger);
 
 app.get("/", (request, response) => {
@@ -110,8 +94,20 @@ app.delete("/api/notes/:id", (request, response) => {
   response.status(204).end();
 });
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
 app.use(unknownEndpoint);
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
 // this has to be the last loaded middleware, also all the routes should be registered before this!
 app.use(errorHandler);
 
